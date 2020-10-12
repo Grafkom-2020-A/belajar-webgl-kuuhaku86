@@ -3,14 +3,16 @@ function main() {
     let gl = canvas.getContext("webgl");
 
     let vertices = [
-        -0.5, 0.5,      // Titik A 
-        -0.5, -0.5,     // Titik B
-        0.5, -0.5,       // Titik C
-        -0.5, 0.5,      // Titik A 
+        -0.5, 0.5, 1.0, 0.0, 0.0,      // Titik A 
+        -0.5, -0.5, 1.0, 0.0, 0.0,     // Titik B
+        0.5, -0.5, 1.0, 0.0, 0.0,      // Titik C
+        0.5, -0.5, 0.0, 0.0, 1.0,      // Titik C
+        0.5, 0.5, 0.0, 0.0, 1.0,       // Titik D
+        -0.5, 0.5, 0.0, 0.0, 1.0       // Titik A 
     ];
 
-    let positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    let vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
@@ -32,17 +34,21 @@ function main() {
     gl.linkProgram(shaderProgram);
     gl.useProgram(shaderProgram);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     let aPosition = gl.getAttribLocation(shaderProgram, "a_Position");
-    gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+    let aColor = gl.getAttribLocation(shaderProgram, "a_Color");
+    gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 5 * Float32Array.BYTES_PER_ELEMENT, 0);
+    gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 5 * Float32Array.BYTES_PER_ELEMENT, 2 * Float32Array.BYTES_PER_ELEMENT);
     gl.enableVertexAttribArray(aPosition);
+    gl.enableVertexAttribArray(aColor);
 
     gl.clearColor(0.2, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
+    // gl.viewport(0, 0, canvas.width * (canvas.height / canvas.width), canvas.height)
 
-    let primitive = gl.TRIANGLE_FAN;
+    let primitive = gl.TRIANGLES;
     let offset = 0;
-    let count = 3;
+    let count = 6;
 
     gl.drawArrays(primitive, offset, count)
 }
