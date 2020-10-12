@@ -6,7 +6,19 @@
     <title>Belajar WebGL-Grafkom</title>
 </head>
 <body onload="main()">
-    <canvas id="myCanvas" height="500" width="600"> Peramban tidak mendukung canvas HTML5 </canvas>
+    <canvas id="myCanvas" height="800" width="800"> Peramban tidak mendukung canvas HTML5 </canvas>
     <script type="text/javascript" src="script.js"></script>
+    <script id="vertexShaderSource" type="notjs">
+        attribute vec2 a_Position; 
+
+        void main() {
+            gl_Position = vec4(a_Position, 0.0, 1.0);
+        }
+    </script>
+    <script id="fragmentShaderSource" type="notjs">
+        void main() {
+            gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+        }
+    </script>
 </body>
 </html>
