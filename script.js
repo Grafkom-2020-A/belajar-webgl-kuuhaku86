@@ -40,9 +40,9 @@ function main() {
     gl.clearColor(0.2, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    let primitive = gl.LINE_STRIP;
+    let primitive = gl.TRIANGLE_FAN;
     let offset = 0;
-    let count = 4;
+    let count = 3;
 
     gl.drawArrays(primitive, offset, count)
 }
