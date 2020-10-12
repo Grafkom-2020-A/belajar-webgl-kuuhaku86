@@ -6,6 +6,7 @@ function main() {
         -0.5, 0.5,      // Titik A 
         -0.5, -0.5,     // Titik B
         0.5, -0.5,       // Titik C
+        -0.5, 0.5,      // Titik A 
     ];
 
     let positionBuffer = gl.createBuffer();
@@ -39,9 +40,9 @@ function main() {
     gl.clearColor(0.2, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    let primitive = gl.LINE_LOOP;
+    let primitive = gl.LINE_STRIP;
     let offset = 0;
-    let count = 3;
+    let count = 4;
 
     gl.drawArrays(primitive, offset, count)
 }
