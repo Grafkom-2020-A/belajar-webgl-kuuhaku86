@@ -37,18 +37,71 @@ function main() {
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     let aPosition = gl.getAttribLocation(shaderProgram, "a_Position");
     let aColor = gl.getAttribLocation(shaderProgram, "a_Color");
-    gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 5 * Float32Array.BYTES_PER_ELEMENT, 0);
-    gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 5 * Float32Array.BYTES_PER_ELEMENT, 2 * Float32Array.BYTES_PER_ELEMENT);
+    gl.vertexAttribPointer(
+        aPosition, 
+        2, 
+        gl.FLOAT, 
+        false, 
+        5 * Float32Array.BYTES_PER_ELEMENT, 
+        0
+    );
+    gl.vertexAttribPointer(
+        aColor, 
+        3, 
+        gl.FLOAT, 
+        false, 
+        5 * Float32Array.BYTES_PER_ELEMENT, 
+        2 * Float32Array.BYTES_PER_ELEMENT
+    );
     gl.enableVertexAttribArray(aPosition);
     gl.enableVertexAttribArray(aColor);
 
     gl.clearColor(0.2, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    // gl.viewport(0, 0, canvas.width * (canvas.height / canvas.width), canvas.height)
+    gl.viewport(0, 0, canvas.width * (canvas.height / canvas.width), canvas.height)
 
     let primitive = gl.TRIANGLES;
     let offset = 0;
     let count = 6;
 
-    gl.drawArrays(primitive, offset, count)
+    let dx = 0;
+    let dy = 0;
+    let dz = 0;
+    let uDx = gl.getUniformLocation(shaderProgram, 'dx');
+    let uDy = gl.getUniformLocation(shaderProgram, 'dy');
+    let uDz = gl.getUniformLocation(shaderProgram, 'dz');
+
+    let freeze = false;
+
+    function onMouseClick(event) {
+        freeze = !freeze;
+    }
+
+    function onKeyDown(event) {
+        if (event.keyCode == 32) freeze = true;
+    }
+
+    function onKeyUp(event) {
+        if (event.keyCode == 32) freeze = false;
+    }
+
+    canvas.addEventListener('click', onMouseClick);
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
+
+    function render() {
+        if(!freeze) {
+            dx += 0.001;
+            dy += 0.001;
+            dz += 0.002;
+        }
+        gl.uniform1f(uDx, dx);
+        gl.uniform1f(uDy, dy);
+        gl.uniform1f(uDz, dz);
+        gl.clearColor(0.0, 0.22, 0.5, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(primitive, offset, count);
+        requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
 }
