@@ -7,24 +7,19 @@
 </head>
 <body onload="main()">
     <canvas id="myCanvas" height="600" width="800"> Peramban tidak mendukung canvas HTML5 </canvas>
+    <script type="text/javascript" src="gl-matrix-min.js"></script>
     <script type="text/javascript" src="script.js"></script>
     <script id="vertexShaderSource" type="notjs">
         attribute vec2 a_Position; 
         attribute vec3 a_Color;
         varying vec3 v_Color;
-        uniform float dx;
-        uniform float dy;
-        uniform float dz;
+        uniform mat4 projection;
+        uniform mat4 view;
+        uniform mat4 model;
 
         void main() {
             v_Color = a_Color;
-            mat4 translasi = mat4(
-                1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                dx, dy, dz, 1.0
-            );
-            gl_Position = translasi * vec4(a_Position, 0.0, 1.0);
+            gl_Position = projection * model * view * vec4(a_Position, 0.0, 1.0);
         }
     </script>
     <script id="fragmentShaderSource" type="notjs">

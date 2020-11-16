@@ -64,40 +64,41 @@ function main() {
     let offset = 0;
     let count = 6;
 
-    let dx = 0;
-    let dy = 0;
-    let dz = 0;
-    let uDx = gl.getUniformLocation(shaderProgram, 'dx');
-    let uDy = gl.getUniformLocation(shaderProgram, 'dy');
-    let uDz = gl.getUniformLocation(shaderProgram, 'dz');
+    let model = glMatrix.mat4.create();
+    let view = glMatrix.mat4.create();
+    glMatrix.mat4.lookAt(
+        view,
+        // dimana posisi kamera,
+        [0.0, 0.0, 0.0],
+        // arah menghadap
+        [0.0, 0.0, -2.0],
+        // kemana arah atas kamera
+        [0.0, 1.0, 0.0]
+    );
+    let projection = glMatrix.mat4.create();
+    glMatrix.mat4.perspective(
+        projection,
+        //fov in radiant
+        glMatrix.glMatrix.toRadian(90),
+        1.0,
+        0.5,
+        10.0,
+    );
+    let uModel = gl.getUniformLocation(shaderProgram, 'model');
+    let uView = gl.getUniformLocation(shaderProgram, 'view');
+    let uProjection = gl.getUniformLocation(shaderProgram, 'projection');
 
-    let freeze = false;
-
-    function onMouseClick(event) {
-        freeze = !freeze;
-    }
-
-    function onKeyDown(event) {
-        if (event.keyCode == 32) freeze = true;
-    }
-
-    function onKeyUp(event) {
-        if (event.keyCode == 32) freeze = false;
-    }
-
-    canvas.addEventListener('click', onMouseClick);
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('keyup', onKeyUp);
+    let dx = 0.0;
+    let dz = 0.0;
 
     function render() {
-        if(!freeze) {
-            dx += 0.001;
-            dy += 0.001;
-            dz += 0.002;
-        }
-        gl.uniform1f(uDx, dx);
-        gl.uniform1f(uDy, dy);
-        gl.uniform1f(uDz, dz);
+        dx += 0.00001;
+        dz += 0.00001;
+        // Tambah translasi ke matriks model
+        glMatrix.mat4.translate(model, model, [0.0, 0.0, dz]);
+        gl.uniformMatrix4fv(uModel, false, model);
+        gl.uniformMatrix4fv(uView, false, view);
+        gl.uniformMatrix4fv(uProjection, false, projection);
         gl.clearColor(0.0, 0.22, 0.5, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(primitive, offset, count);
