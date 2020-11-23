@@ -90,9 +90,7 @@ function main() {
     gl.enableVertexAttribArray(aPosition);
     gl.enableVertexAttribArray(aColor);
 
-    gl.clearColor(0.2, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.viewport(0, 0, canvas.width * (canvas.height / canvas.width), canvas.height)
+    gl.viewport(100, 0, canvas.height, canvas.height);
     gl.enable(gl.DEPTH_TEST);
 
     let primitive = gl.TRIANGLES;
@@ -132,7 +130,7 @@ function main() {
         gl.uniformMatrix4fv(uModel, false, model);
         gl.uniformMatrix4fv(uView, false, view);
         gl.uniformMatrix4fv(uProjection, false, projection);
-        gl.clearColor(0.0, 0.22, 0.5, 1.0);
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BI | gl.DEPTH_BUFFER_BIT);
         gl.drawArrays(primitive, offset, count);
         requestAnimationFrame(render);
