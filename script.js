@@ -3,6 +3,7 @@ function main() {
     let gl = canvas.getContext("webgl");
 
     let vertices = [];
+
     let cubePoints = [
         [-0.5,  0.5,  0.5],   // A, 0
         [-0.5, -0.5,  0.5],   // B, 1
@@ -118,9 +119,12 @@ function main() {
         0.5,
         10.0,
     );
-    let uModel = gl.getUniformLocation(shaderProgram, 'model');
-    let uView = gl.getUniformLocation(shaderProgram, 'view');
-    let uProjection = gl.getUniformLocation(shaderProgram, 'projection');
+    let uModel = gl.getUniformLocation(shaderProgram, 'u_Model');
+    let uView = gl.getUniformLocation(shaderProgram, 'u_View');
+    let uProjection = gl.getUniformLocation(shaderProgram, 'u_Projection');
+
+    let uAmbientColor = gl.getUniformLocation(shaderProgram, 'u_AmbientColor');
+    gl.uniform3fv(uAmbientColor, [0.2, 0.4, 0.6]);
 
     function render() {
         let theta = glMatrix.glMatrix.toRadian(1);
