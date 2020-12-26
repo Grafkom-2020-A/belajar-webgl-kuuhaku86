@@ -1,3 +1,22 @@
+function readTextFile(file)
+{
+    let rawFile = new XMLHttpRequest();
+    let allText = "";
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                allText = rawFile.responseText;
+            }
+        }
+    }
+    rawFile.send(null);
+    return allText;
+}
+
 function main() {
     let canvas = document.getElementById("myCanvas");
     let gl = canvas.getContext("webgl");
@@ -64,13 +83,13 @@ function main() {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    let vertexShaderCode = document.getElementById('vertexShaderSource').text;
+    let vertexShaderCode = readTextFile('glsl/glslVertex.glsl');
 
     let vertexShader = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vertexShader, vertexShaderCode);
     gl.compileShader(vertexShader);
 
-    let fragmentShaderCode = document.getElementById('fragmentShaderSource').text;
+    let fragmentShaderCode = readTextFile('glsl/glslFragment.glsl');
 
     let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
     gl.shaderSource(fragmentShader, fragmentShaderCode);

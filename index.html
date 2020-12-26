@@ -8,44 +8,8 @@
 <body onload="main()">
     <canvas id="myCanvas" height="600" width="800"> Peramban tidak mendukung canvas HTML5 </canvas>
     <script type="text/javascript" src="gl-matrix-min.js"></script>
-    <script id="vertexShaderSource" type="notjs">
-        attribute vec3 a_Position;
-        attribute vec3 a_Color;
-        attribute vec3 a_Normal;
-        varying vec3 v_Color;
-        varying vec3 v_Normal;
-        varying vec3 v_Position;
-        uniform mat4 u_Projection;
-        uniform mat4 u_View;
-        uniform mat4 u_Model;
-        uniform mat3 u_Normal;
-
-        void main() {
-            gl_Position = u_Projection * u_View * u_Model * vec4(a_Position, 1.0);
-            v_Position = (u_Model * vec4(a_Position, 1.0)).xyz;
-            v_Color = a_Color;
-            v_Normal = normalize(u_Normal * a_Normal);
-        }
-    </script>
-    <script id="fragmentShaderSource" type="notjs">
-        precision mediump float;
-        uniform vec3 u_DiffuseColor;
-        uniform vec3 u_DiffusePosition;
-        uniform vec3 u_AmbientColor;
-        varying vec3 v_Color;
-        varying vec3 v_Normal;
-        varying vec3 v_Position;
-
-        void main() {
-            // Vektor cahaya = titik sumber cahaya - titik verteks
-            vec3 lightPos = u_DiffusePosition;
-            vec3 v_light = normalize(lightPos - v_Position);
-            float dotNL = max(dot(v_Normal, v_light), 0.0);
-            vec3 diffuse = v_Color * u_DiffuseColor * dotNL;
-            vec3 ambient = v_Color * u_AmbientColor;
-            gl_FragColor = vec4(ambient + diffuse, 1.0);
-        }
-    </script>
+    <script id="vertexShaderSource" data-src="glsl/glslVertex.glsl" data-type="vertex" type="notjs"></script>
+    <script id="fragmentShaderSource"  data-src="glsl/glslFragment.glsl" data-type="fragment" type="notjs"></script>
     <script type="text/javascript" src="script.js"></script>
 </body>
 </html>
